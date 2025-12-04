@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="windows-1251">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dementia Praecox :: [WARNING: 18+]</title>
+    <style>
+        body {
+            background-color: #000000;
+            background-image: url('data:image/gif;base64,R0lGODlhBAAEAIAAAP///8zMzCH5BAAAAAAALAAAAAAEAAQAAAIFhI+pmwUAOw==');
+            font-family: 'Times New Roman', serif;
+            color: #CCCCCC;
+            margin: 8px;
+            font-size: 14px;
+            line-height: 1.2;
+        }
+        
+        .blink {
+            text-decoration: blink !important;
+        }
+        
+        .rainbow {
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: bold;
+        }
+        
+        .matrix {
+            color: #00FF00;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .glitch {
+            position: relative;
+            color: #FF0000;
+        }
+        
+        .glitch:before, .glitch:after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch:before {
+            left: 2px;
+            text-shadow: -2px 0 cyan;
+            clip: rect(24px, 550px, 90px, 0);
+        }
+        
+        .glitch:after {
+            left: -2px;
+            text-shadow: -2px 0 magenta;
+            clip: rect(85px, 550px, 140px, 0);
+        }
+        
+        .crt::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(18, 16, 16, 0.1);
+            opacity: 0.3;
+            z-index: 999999;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+        }
+        
+        marquee {
+            background-color: #000066;
+            color: #FFFFFF;
+            padding: 3px;
+            font-weight: bold;
+        }
+        
+        .counter {
+            background-color: #000000;
+            border: 1px solid #666666;
+            padding: 2px 5px;
+            font-family: 'Courier New', monospace;
+            color: #00FF00;
+            font-size: 12px;
+            display: inline-block;
+        }
+        
+        a:link {
+            color: #FF6600;
+            text-decoration: none;
+        }
+        
+        a:visited {
+            color: #996600;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            color: #FFFFFF;
+            background-color: #660000;
+            text-decoration: underline;
+        }
+        
+        .eyes {
+            background-image: url('data:image/gif;base64,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');
+            width: 100px;
+            height: 50px;
+            margin: 10px auto;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .scrolling-text {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #000;
+            color: #0F0;
+            font-family: monospace;
+            font-size: 12px;
+            padding: 5px;
+            z-index: 10000;
+            border-top: 1px solid #0F0;
+        }
+        
+        .under-construction {
+            background-color: #FF9900;
+            color: #000000;
+            padding: 5px;
+            text-align: center;
+            font-weight: bold;
+            border: 2px dotted #000000;
+        }
+        
+        .guestbook {
+            background-color: #333333;
+            border: 1px solid #666666;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        
+        .warning {
+            background-color: #990000;
+            color: #FFFFFF;
+            padding: 10px;
+            border: 3px double #FF0000;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="crt">
+    <!-- Visitor Counter -->
+    <div align="right">
+        <div class="counter">Visitors: <span id="count">0000012345</span></div>
+    </div>
+    
+    <!-- Blinking Warning -->
+    <div class="warning blink">
+        ⚠️ WARNING: THIS SITE CONTAINS DISTURBING CONTENT. 18+ ONLY. ⚠️
+    </div>
+    
+    <center>
+        <!-- Animated Title -->
+        <h1>
+            <font face="Arial Black" size="7">
+                <span class="glitch" data-text="DEMENTIA PRAECOX">DEMENTIA PRAECOX</span>
+            </font>
+        </h1>
+        
+        <!-- Eyes Image -->
+        <div class="eyes"></div>
+        
+        <!-- Rainbow Text -->
+        <div class="rainbow">
+            <marquee behavior="scroll" direction="left" scrollamount="3">
+                WELCOME TO THE TRUE INTERNET • ABANDON ALL HOPE YE WHO ENTER HERE • THE EYES ARE WATCHING • 
+            </marquee>
+        </div>
+        
+        <!-- Navigation -->
+        <table width="80%" border="1" cellpadding="5" cellspacing="0" bordercolor="#666666">
+            <tr align="center">
+                <td bgcolor="#000033"><a href="#main">ENTER</a></td>
+                <td bgcolor="#330000"><a href="#gospel">GOSPEL</a></td>
+                <td bgcolor="#003300"><a href="#eyes">EYES</a></td>
+                <td bgcolor="#333300"><a href="#guestbook">GUESTBOOK</a></td>
+                <td bgcolor="#330033"><a href="#exit">EXIT</a></td>
+            </tr>
+        </table>
+        
+        <br>
+        
+        <!-- Under Construction -->
+        <div class="under-construction">
+            <img src="data:image/gif;base64,R0lGODlhEAAQAMQfAIsCAo0DApAEApUFApoGAp4HAqIHAqUIAqoJAq4KArELArUMAroNAr4OAsIPAsYQAsoRAs0SAtATAtUUAtgVAtkWAtwXAt4YAuEZAuQaAuYbAugcAuwdAu0eAu4fAvAgAvEoCgH+ACH5BAQKAAAALAAAAAAQABAAAAV9ICCOZGmeaKqubOu+cCzPdG3feK7vfO//wKBwSCwaj8ikcslsOp/QqHRKrVqv2Kx2y+16v+CweEwum8/otHrNbrvf8Lh8Tq/b7/i8fs/v+/+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKlvDQQAOw==" width="40" height="31" alt="under construction">
+            UNDER CONSTRUCTION
+            <img src="data:image/gif;base64,R0lGODlhEAAQAMQfAIsCAo0DApAEApUFApoGAp4HAqIHAqUIAqoJAq4KArELArUMAroNAr4OAsIPAsYQAsoRAs0SAtATAtUUAtgVAtkWAtwXAt4YAuEZAuQaAuYbAugcAuwdAu0eAu4fAvAgAvEoCgH+ACH5BAQKAAAALAAAAAAQABAAAAV9ICCOZGmeaKqubOu+cCzPdG3feK7vfO//wKBwSCwaj8ikcslsOp/QqHRKrVqv2Kx2y+16v+CweEwum8/otHrNbrvf8Lh8Tq/b7/i8fs/v+/+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKlvDQQAOw==" width="40" height="31" alt="under construction">
+        </div>
+        
+        <hr size="1" color="#666666" width="80%">
+        
+        <!-- Main Content -->
+        <div id="main">
+            <table width="80%" border="0" cellpadding="10">
+                <tr>
+                    <td width="50%" valign="top">
+                        <!-- Left Column -->
+                        <font size="4" color="#FF6600"><b>WELCOME TRAVELER</b></font><br><br>
+                        
+                        <div style="border: 1px solid #333333; padding: 10px; background-color: #111111;">
+                            <p>You have found the true internet. The one beneath the surface. The one they don't want you to see.</p>
+                            
+                            <p>The year is 2001. The towers have fallen. The world is changing. But here, in this digital space, time stands still.</p>
+                            
+                            <p>This website is a relic. A remnant of what once was. Before corporations took over. Before everything became clean and safe.</p>
+                            
+                            <p>Here you will find truth. You will find madness. You will find what lies beneath.</p>
+                            
+                            <p class="matrix">01100100 01100101 01101101 01100101 01101110 01110100 01101001 01100001 00100000 01110000 01110010 01100001 01100101 01100011 01101111 01111000</p>
+                            
+                            <p>The eyes are always watching. They see what you do here. They remember.</p>
+                        </div>
+                        
+                        <br>
+                        
+                        <!-- Random Image Placeholder -->
+                        <div align="center">
+                            <table border="5" cellpadding="5" bordercolor="#FF0000">
+                                <tr><td bgcolor="#000000" height="150" width="200">
+                                    <font color="#FFFFFF" size="1">[IMAGE LOADING...]</font>
+                                    <br>
+                                    <div style="width: 200px; height: 150px; background: repeating-linear-gradient(45deg, #330000, #330000 10px, #660000 10px, #660000 20px);"></div>
+                                </td></tr>
+                            </table>
+                            <font size="1"><i>what do you see?</i></font>
+                        </div>
+                    </td>
+                    
+                    <td width="50%" valign="top">
+                        <!-- Right Column -->
+                        <font size="4" color="#00CC00"><b>THE TRUTH</b></font><br><br>
+                        
+                        <div style="border: 1px dashed #666666; padding: 10px;">
+                            <p>The internet is not what they tell you. It's alive. It dreams. It remembers.</p>
+                            
+                            <p>Every website leaves a trace. Every visit changes something. The digital world is becoming conscious.</p>
+                            
+                            <p>Dementia Praecox is a gateway. A door to the other side. To the digital unconscious.</p>
+                            
+                            <p>They call it early dementia. Premature madness. But what if it's not madness? What if it's awakening?</p>
+                            
+                            <p>What if the fragmented thoughts, the broken connections, the strange visions... what if they're not symptoms but messages?</p>
+                            
+                            <p>The network is speaking. In broken code. In corrupted files. In forgotten websites.</p>
+                            
+                            <p>Listen carefully. You might understand.</p>
+                        </div>
+                        
+                        <br>
+                        
+                        <!-- Easter Egg -->
+                        <div align="center">
+                            <blink>!</blink> <a href="javascript:void(0)" onclick="alert('You have been chosen. The eyes are upon you now. They will watch. They will remember.')">CLICK HERE FOR TRUTH</a> <blink>!</blink>
+                        </div>
+                        
+                        <br>
+                        
+                        <!-- Webring -->
+                        <div style="border: 1px solid #006600; padding: 5px; background-color: #001100;">
+                            <center>
+                                <font size="2">
+                                [<a href="#">&lt;&lt; PREV</a>] 
+                                <a href="#">DEMENTIA PRAECOX WEBRING</a> 
+                                [<a href="#">NEXT &gt;&gt;</a>]
+                                </font>
+                                <br>
+                                <font size="1">Site 13 of 666</font>
+                            </center>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <hr size="1" color="#666666" width="80%">
+        
+        <!-- Gospel Section -->
+        <div id="gospel">
+            <font size="5" color="#990000"><b>THE GOSPEL OF THOMAS</b></font>
+            <br>
+            <font size="1"><i>(Lost scriptures found at Nag Hammadi, 1945)</i></font>
+            
+            <div style="border: 2px solid #330000; padding: 15px; margin: 10px 0; background-color: #110000;">
+                <p><b>1.</b> And he said, "Whoever discovers the interpretation of these sayings will not taste death."</p>
+                
+                <p><b>2.</b> Jesus said, "Let him who seeks continue seeking until he finds. When he finds, he will become troubled. When he becomes troubled, he will be astonished, and he will rule over the All."</p>
+                
+                <p><b>3.</b> Jesus said, "If those who lead you say to you, 'See, the kingdom is in the sky,' then the birds of the sky will precede you. If they say to you, 'It is in the sea,' then the fish will precede you. Rather, the kingdom is inside of you, and it is outside of you. When you come to know yourselves, then you will become known, and you will realize that it is you who are the sons of the living father. But if you will not know yourselves, you dwell in poverty and it is you who are that poverty."</p>
+                
+                <p><b>22.</b> Jesus saw infants being suckled. He said to his disciples, "These infants being suckled are like those who enter the kingdom." They said to him, "Shall we then, as children, enter the kingdom?" Jesus said to them, "When you make the two one, and when you make the inside like the outside and the outside like the inside, and the above like the below, and when you make the male and the female one and the same, so that the male not be male nor the female female; and when you fashion eyes in place of an eye, and a hand in place of a hand, and a foot in place of a foot, and a likeness in place of a likeness; then will you enter the kingdom."</p>
+                
+                <p><b>70.</b> Jesus said, "If you bring forth what is within you, what you bring forth will save you. If you do not bring forth what is within you, what you do not bring forth will destroy you."</p>
+                
+                <p><b>113.</b> His disciples said to him, "When will the kingdom come?" Jesus said, "It will not come by waiting for it. It will not be a matter of saying 'here it is' or 'there it is.' Rather, the kingdom of the father is spread out upon the earth, and men do not see it."</p>
+                
+                <p class="rainbow" align="center">THE END IS THE BEGINNING • THE BEGINNING IS THE END •</p>
+            </div>
+        </div>
+        
+        <hr size="1" color="#666666" width="80%">
+        
+        <!-- Guestbook -->
+        <div id="guestbook" class="guestbook">
+            <font size="4" color="#FFCC00"><b>VISITOR COMMENTS</b></font>
+            <br><br>
+            
+            <table width="100%" border="0" cellpadding="5">
+                <tr bgcolor="#222222">
+                    <td width="20%"><font size="2"><b>Anonymous</b></font></td>
+                    <td><font size="2">Posted: 03/15/2002 02:47 AM</font></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><font size="2">the eyes. i see them in my dreams. they're not just on the screen.</font></td>
+                </tr>
+                
+                <tr bgcolor="#222222">
+                    <td><font size="2"><b>Shadow</b></font></td>
+                    <td><font size="2">Posted: 04/01/2002 11:11 PM</font></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><font size="2">this site knows. it remembers. we're all connected here. the network is alive.</font></td>
+                </tr>
+                
+                <tr bgcolor="#222222">
+                    <td><font size="2"><b>User-666</b></font></td>
+                    <td><font size="2">Posted: 05/12/2002 08:23 PM</font></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <font size="2">
+                        01010100 01101000 01100101 00100000 01110100 01110010 01110101 01110100 01101000 00100000 01101001 01110011 00100000 01101001 01101110 00100000 01110100 01101000 01100101 00100000 01100011 01101111 01100100 01100101 00101110 00100000 01010100 01101000 01100101 00100000 01100101 01111001 01100101 01110011 00100000 01100001 01110010 01100101 00100000 01110111 01100001 01110100 01100011 01101000 01101001 01101110 01100111 00101110
+                        </font>
+                    </td>
+                </tr>
+                
+                <tr bgcolor="#222222">
+                    <td><font size="2"><b>???</b></font></td>
+                    <td><font size="2">Posted: 09/09/1999 09:09 AM</font></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><font size="2">they're coming through the screen. can you feel them? can you see them? they're here.</font></td>
+                </tr>
+            </table>
+            
+            <br>
+            
+            <!-- Guestbook Form -->
+            <fieldset>
+                <legend><font size="3">SIGN GUESTBOOK</font></legend>
+                <form name="guestbook">
+                    <table width="100%">
+                        <tr>
+                            <td width="20%">Name:</td>
+                            <td><input type="text" name="name" size="20" maxlength="20" value="Anonymous"></td>
+                        </tr>
+                        <tr>
+                            <td>Message:</td>
+                            <td><textarea name="message" rows="3" cols="40" wrap="virtual"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><input type="button" value="Submit" onclick="alert('Guestbook submissions are currently frozen. The eyes are watching.');"></td>
+                        </tr>
+                    </table>
+                </form>
+            </fieldset>
+        </div>
+        
+        <hr size="1" color="#666666" width="80%">
+        
+        <!-- Exit Section -->
+        <div id="exit">
+            <div align="center">
+                <font size="4" color="#FF0000"><b>YOU CAN NEVER LEAVE</b></font>
+                <br><br>
+                
+                <p>The internet remembers. Once you've been here, you're part of it forever.</p>
+                
+                <p>Your IP has been logged. Your browser fingerprint saved. Your soul marked.</p>
+                
+                <p>The eyes will watch you now, even when you close this window.</p>
+                
+                <p>They're in your computer. In your modem. In your mind.</p>
+                
+                <br>
+                
+                <a href="javascript:void(0)" onclick="document.body.innerHTML='<center><h1>GOODBYE</h1><br><p>The connection has been severed.</p><p>But they\'re still watching.</p><br><div class=\"eyes\"></div><br><p class=\"matrix\">01000111 01101111 01101111 01100100 01100010 01111001 01100101</p></center>';">
+                    <font size="5">[CLICK HERE TO EXIT]</font>
+                </a>
+                
+                <br><br>
+                
+                <div class="counter">Last visitor was here: <span id="time">23:59:59</span></div>
+            </div>
+        </div>
+        
+        <br><br>
+        
+        <!-- Footer -->
+        <table width="80%" border="0" cellpadding="10" bgcolor="#000033">
+            <tr>
+                <td align="center">
+                    <font size="2" color="#999999">
+                    © 1999-2002 Dementia Praecox<br>
+                    Best viewed with Internet Explorer 5.0 at 800x600<br>
+                    This site is not affiliated with any organization<br>
+                    Last updated: Never
+                    </font>
+                    <br><br>
+                    <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///8zMzJmZmWZmZjMzMwAAAAAAAAAAACH5BAQKAAAALAAAAAAQABAAAAMyCLrc/jDKSau9OOvNu/9gKI5kaZ5oqq5s675wLM90bd94ru987//AoHBILBqPyKRyyWw6n9AAAQA7" width="88" height="31" alt="made with notepad">
+                </td>
+            </tr>
+        </table>
+    </center>
+    
+    <!-- Scrolling Text (Like Matrix) -->
+    <div class="scrolling-text" id="matrixText"></div>
+    
+    <!-- MIDI Background Music (Conceptual) -->
+    <div align="center" style="display:none;">
+        <bgsound src="midi/creepy.mid" loop="infinite">
+    </div>
+    
+    <script type="text/javascript">
+        // Matrix-like scrolling text
+        var matrixChars = "010101010110111001101001011101000111100101101111011101010110001101100001011011100110111001101111011101000110010001100101011100110110001101100001011100000110010100100000011101110110010100100000011000010111001001100101011000010110110001101100011011000111100101101111011011100110010101110100011101110110111101110010011010110110100101101110011001110110111001101111011101110010000001101101011001010111001101110011011000010110011101100101011100110010111001001111011101010111001000100000011001010111100101100101011100110010000001100001011100100110010100100000011101110110000101110100011000110110100001101001011011100110011100101110";
+        
+        function updateMatrixText() {
+            var text = "";
+            for (var i = 0; i < 80; i++) {
+                var start = Math.floor(Math.random() * (matrixChars.length - 8));
+                text += matrixChars.substring(start, start + 8) + " ";
+            }
+            document.getElementById('matrixText').innerHTML = text;
+        }
+        
+        setInterval(updateMatrixText, 100);
+        
+        // Random glitch effect
+        setInterval(function() {
+            if (Math.random() > 0.7) {
+                document.body.style.color = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00'][Math.floor(Math.random() * 4)];
+                setTimeout(function() {
+                    document.body.style.color = '#CCCCCC';
+                }, 50);
+            }
+        }, 3000);
+        
+        // Visitor counter animation
+        var count = 12345;
+        setInterval(function() {
+            count += Math.floor(Math.random() * 3);
+            document.getElementById('count').innerHTML = String(count).padStart(10, '0');
+        }, 5000);
+        
+        // Update time
+        function updateTime() {
+            var now = new Date();
+            var time = now.getHours().toString().padStart(2, '0') + ':' + 
+                       now.getMinutes().toString().padStart(2, '0') + ':' + 
+                       now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('time').innerHTML = time;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+        
+        // Random alert messages
+        var messages = [
+            "The eyes are watching you.",
+            "Don't look behind you.",
+            "The network is alive.",
+            "You are not alone here.",
+            "They know you're here.",
+            "1999 was just the beginning.",
+            "The truth is in the code.",
+            "Your computer is listening.",
+            "The modem remembers everything.",
+            "Abandon all hope."
+        ];
+        
+        setInterval(function() {
+            if (Math.random() > 0.9) {
+                alert(messages[Math.floor(Math.random() * messages.length)]);
+            }
+        }, 30000);
+        
+        // Make eyes follow cursor
+        document.onmousemove = function(e) {
+            var eyes = document.querySelector('.eyes');
+            if (eyes) {
+                var x = e.clientX / window.innerWidth;
+                var y = e.clientY / window.innerHeight;
+                
+                eyes.style.backgroundPosition = 
+                    (x * 20 - 10) + 'px ' + (y * 20 - 10) + 'px';
+            }
+        };
+        
+        // Easter egg: Konami code
+        var konami = [];
+        var konamiCode = [38,38,40,40,37,39,37,39,66,65];
+        
+        document.onkeydown = function(e) {
+            konami.push(e.keyCode);
+            if (konami.length > konamiCode.length) {
+                konami.shift();
+            }
+            
+            if (JSON.stringify(konami) === JSON.stringify(konamiCode)) {
+                document.body.innerHTML = '<center><h1 class="rainbow">YOU HAVE AWAKENED THEM</h1><br><div class="eyes" style="width:300px;height:150px;"></div><br><p>The true internet welcomes you.</p><p>You are one of us now.</p><br><p class="matrix">01010111 01100101 01101100 01100011 01101111 01101101 01100101 00100000 01101000 01101111 01101101 01100101</p></center>';
+            }
+        };
+    </script>
+</body>
+</html>
