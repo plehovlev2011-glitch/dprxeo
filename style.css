@@ -238,3 +238,84 @@ p,li,input{
         font-size:12px;
     }
 }
+/* Стили для PNG кнопок */
+.image-btn {
+    position: relative;
+    width: 180px;
+    height: 45px;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    transition: all 0.2s ease;
+    transform: translateZ(0);
+    line-height: 0;
+}
+
+.image-btn img {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 45px !important;
+    max-width: 180px !important;
+    object-fit: contain !important;
+    z-index: 2 !important;
+    background: transparent !important;
+}
+
+.image-btn:hover {
+    transform: translateZ(0) translateY(-2px);
+}
+
+.image-btn:active {
+    transform: translateZ(0) translateY(0);
+}
+
+/* Эффект клика для PNG кнопок */
+.image-btn.clicked {
+    animation: clickEffect 0.15s ease-out;
+}
+
+/* Убираем белый фон у кнопок-контейнеров */
+.styled-btn[class*="image-btn"] {
+    background: transparent !important;
+}
+
+/* Адаптивность для PNG кнопок */
+@media screen and (max-width: 768px) {
+    .image-btn {
+        width: 160px;
+        height: 40px;
+    }
+    
+    .image-btn img {
+        max-height: 40px !important;
+        max-width: 160px !important;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .image-btn {
+        width: 140px;
+        height: 35px;
+    }
+    
+    .image-btn img {
+        max-height: 35px !important;
+        max-width: 140px !important;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .image-btn {
+        width: 130px;
+        height: 32px;
+    }
+    
+    .image-btn img {
+        max-height: 32px !important;
+        max-width: 130px !important;
+    }
+}
