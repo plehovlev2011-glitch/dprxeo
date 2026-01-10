@@ -1,5 +1,4 @@
 $(function(){
-    // ОРИГИНАЛЬНЫЙ РАБОЧИЙ КОД SOPHIE
     setTimeout(function(){
         scrollTo(0,-1);
     },0);
@@ -10,6 +9,12 @@ $(function(){
     var down = 0;
     var timer = 0;
 
+    $( "html,body" ).keypress(function( event ) {
+      if ( event.which == 112 ) {
+        $("html,body").animate({"scrollTop":30000},100000,"linear")
+      }
+    });
+
     $("html,body").scrollTop(0);
 
     $("img").width($(window).width());
@@ -18,13 +23,15 @@ $(function(){
         if($(window).scrollTop() == 0){
             $("html,body").animate({"scrollTop":$(".viewport").height()})
         }
-    })
+    });
 
     function init(){
         $("img").width($(window).width());
+        console.log("a");
     }
 
     $(window).on("resize",function(){
+        console.log("resize");
         init();
     });
 
@@ -44,7 +51,7 @@ $(function(){
         if(cur > $(".viewport").height()*i){
             i++;
             togglePosition();
-            $("html,body").height($("html,body").height()+$(".viewport").height())
+            $("html,body").height($("html,body").height()+$(".viewport").height());
         }
 
         //scrolling up
@@ -56,18 +63,19 @@ $(function(){
 
         //reset 
         if(cur <= 0){
+            console.log("reset");
             $(".page.a").removeClass("a");
             $(".page").eq(0).addClass("a");
         }
 
-        //change text - ЭТА ФУНКЦИЯ ПЕРЕКЛЮЧАЕТ СТРАНИЦЫ!
+        //change text
         if($("img").height() == $(".viewport").height() && cur > 10){
             if(timer == 0){
                 timer = 1;
                 text();
                 setTimeout(function(){
                     timer = 0;
-                },300)
+                },300);
             }
         }
 
@@ -80,6 +88,19 @@ $(function(){
             }
             imgt++;
         }
+
+        // Оригинальный код для формы email
+        $("#mc_embed_signup input").on("click",function(e){
+            $(this).val("");
+            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                $("img").hide();
+                $("ul#active").hide();
+            }
+        });
+        
+        $("input.email").on("focusout",function(e){
+            $(this).val("Email Address");
+        });
     });
 
     function togglePosition(){
@@ -100,10 +121,11 @@ $(function(){
             $(".page.a").removeClass("a").next().addClass("a");
         }
     }
-});    // ================================================
-    // ДОБАВЛЕННЫЙ КОД ДЛЯ КНОПОК (ПОСЛЕ ОРИГИНАЛЬНОГО КОДА)
-    // ================================================
 
+    // ================================================
+    // КОД ДЛЯ КНОПОК ТЕЛЕГА/АВИТО/МАРКЕТ
+    // ================================================
+    
     // Инициализация аудио
     var clickSound = document.getElementById('clickSound');
     
@@ -117,41 +139,31 @@ $(function(){
         }
     }
     
-    // Функция для анимации клика
-    function animateClick(button) {
-        $(button).addClass('clicked');
-        setTimeout(function() {
-            $(button).removeClass('clicked');
-        }, 150);
-    }
-    
-    // Переход на страницу ME
-    $('#goToSecret').on('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        playClickSound();
-        animateClick(this);
-        
-        // Переход через 200ms (для звука)
-        setTimeout(function() {
-            window.location.href = 'me.html';
-        }, 200);
-    });
-    
-    // Обработчики для кнопок с ссылками (кроме ME)
-    $('.styled-btn:not(#goToSecret)').on('click', function(e) {
+    // Обработчики для кнопок
+    $('.styled-btn').on('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         
         var link = $(this).data('link');
         
-        playClickSound();
-        animateClick(this);
+        // Воспроизведение звука
+        if (clickSound) {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(function(error) {
+                console.log('Audio play failed:', error);
+            });
+        }
+        
+        // Анимация нажатия
+        $(this).addClass('clicked');
+        setTimeout(function() {
+            $(this).removeClass('clicked');
+        }.bind(this), 300);
         
         // Переход по ссылке с задержкой
         setTimeout(function() {
             if (link) {
+                // Проверяем, нужен ли протокол
                 if (link.startsWith('http') || link.startsWith('https')) {
                     window.open(link, '_blank');
                 } else if (link.startsWith('t.me')) {
@@ -160,5 +172,60 @@ $(function(){
                     window.open('https://' + link, '_blank');
                 }
             }
-        }, 200);
+        }, 200); // Задержка для звука
     });
+
+    // Оригинальный код для кнопок товаров (если нужен)
+    var slide = 0;
+    var slides = ["blk-front.jpg","blk-open.jpg","red-front.jpg","red-open.jpg"];
+    
+    $(".next-slide").on("click",function(){
+        if(slide < slides.length - 1){
+            slide++;
+            $(".item").css({
+                "background":"url(_assets/" + slides[slide] + ") center/contain no-repeat"
+            });
+        }else{
+            slide = 0;
+            $(".item").css({
+                "background":"url(_assets/" + slides[slide] + ") center/contain no-repeat"
+            });
+        }
+    });
+    
+    $(".prev-slide").on("click",function(){
+        if(slide > 0){
+            slide--;
+            $(".item").css({
+                "background":"url(_assets/" + slides[slide] + ") center/contain no-repeat"
+            });
+        }else{
+            slide = slides.length - 1;
+            $(".item").css({
+                "background":"url(_assets/" + slides[slide] + ") center/contain no-repeat"
+            });
+        }
+    });
+
+    $(".option-items span").eq(0).on("click",function(){
+        $(".option-items span").removeClass("a");
+        $(this).addClass("a");
+        $(".purchase-items a").removeClass("a")
+        $(".purchase-items a").eq(0).addClass("a")
+        slide = 0
+        $(".item").css({
+                "background":"url(_assets/" + slides[0] + ") center/contain no-repeat"
+            });
+    });
+    
+    $(".option-items span").eq(1).on("click",function(){
+        $(".option-items span").removeClass("a");
+        $(this).addClass("a");
+        $(".purchase-items a").removeClass("a")
+        $(".purchase-items a").eq(1).addClass("a")
+        slide = 2
+        $(".item").css({
+                "background":"url(_assets/" + slides[2] + ") center/contain no-repeat"
+            });
+    });
+});
