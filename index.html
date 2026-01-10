@@ -27,17 +27,17 @@
             <div class="page">
                 <center>
                     <div class="buttons-container">
-                        <!-- Простые кнопки с PNG картинками -->
-                        <a href="https://t.me/dementiapraecox1" target="_blank" class="png-btn">
-                            <img src="/buttons/tg.png" alt="Telegram">
+                        <!-- Прямые изображения со ссылками -->
+                        <a href="https://t.me/dementiapraecox1" target="_blank" style="display: block; margin: 10px 0;">
+                            <img src="/buttons/tg.png" alt="Telegram" style="width: 180px; height: 45px;">
                         </a>
                         
-                        <a href="https://www.instagram.com/meh88949?utm_source=qr" target="_blank" class="png-btn">
-                            <img src="/buttons/inst.png" alt="Instagram">
+                        <a href="https://www.instagram.com/meh88949?utm_source=qr" target="_blank" style="display: block; margin: 10px 0;">
+                            <img src="/buttons/inst.png" alt="Instagram" style="width: 180px; height: 45px;">
                         </a>
                         
-                        <a href="https://dprxeo.vercel.app/me.html" target="_blank" class="png-btn">
-                            <img src="/buttons/justweb.png" alt="More">
+                        <a href="https://dprxeo.vercel.app/me.html" target="_blank" style="display: block; margin: 10px 0;">
+                            <img src="/buttons/justweb.png" alt="More" style="width: 180px; height: 45px;">
                         </a>
                     </div>
                 </center>
@@ -52,13 +52,10 @@
 
     <script>
     $(document).ready(function(){
-        // Звук клика для PNG кнопок
-        $('.png-btn').on('click', function(e){
-            // Проигрываем звук
+        // Звук клика для кнопок
+        $('.buttons-container a').on('click', function(e){
             $('#clickSound')[0].currentTime = 0;
             $('#clickSound')[0].play();
-            
-            // Ссылка откроется сама, ничего не делаем
         });
     });
     </script>
