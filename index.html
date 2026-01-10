@@ -16,9 +16,13 @@
         <div class="pages">
             <div class="page a">
                 <center>
-                    <p> BIPP
-                        <br>	/
-                    </p>
+                    <!-- Добавляем ссылку на текст "young n stupid" -->
+                    <a href="play.html" style="text-decoration: none; color: inherit; display: block;">
+                        <p style="cursor: pointer;">
+                            young
+                            <br>n stupid
+                        </p>
+                    </a>
                 </center>
             </div>
 
@@ -63,6 +67,20 @@
             // Переход через 300мс
             setTimeout(function(){
                 window.open(href, '_blank');
+            }, 300);
+        });
+        
+        // Звук клика для текста "young n stupid" и переход на play.html
+        $('center a[href="play.html"]').on('click', function(e){
+            e.preventDefault();
+            
+            // Звук
+            $('#clickSound')[0].currentTime = 0;
+            $('#clickSound')[0].play();
+            
+            // Переход через 300мс
+            setTimeout(function(){
+                window.location.href = 'play.html';
             }, 300);
         });
         
