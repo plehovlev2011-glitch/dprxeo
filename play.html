@@ -34,9 +34,10 @@
         /* Название трека */
         .track-title {
             margin: 20px 0;
-            font-size: 18px;
+            font-size: 20px;
             text-align: center;
             padding: 0 20px;
+            font-weight: bold;
         }
         
         /* Контейнер для кнопок плей/пауза/эквалайзер */
@@ -44,7 +45,7 @@
             width: 100vw;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
             padding: 0 20px;
             margin: 20px 0;
         }
@@ -53,7 +54,7 @@
         .control-btn {
             flex: 1;
             max-width: 30vw;
-            height: 60px;
+            height: 70px;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -62,63 +63,98 @@
             cursor: pointer;
         }
         
-        /* Эквалайзер панель */
-        .eq-panel {
+        /* Ползунок перемотки */
+        .seek-container {
             width: 90vw;
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 20px;
-            background: rgba(40, 40, 40, 0.8);
-            border-radius: 10px;
-            display: none; /* Сначала скрыт */
+            max-width: 700px;
+            margin: 15px auto;
         }
         
-        /* Стили для эквалайзера - много ползунков для вида */
-        .eq-slider {
+        .seek-slider {
             width: 100%;
-            margin: 15px 0;
+            height: 8px;
             -webkit-appearance: none;
-            height: 6px;
-            background: #333;
-            border-radius: 3px;
+            background: #555;
             outline: none;
         }
         
-        .eq-slider::-webkit-slider-thumb {
+        .seek-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             width: 20px;
             height: 20px;
             background: white;
-            border-radius: 50%;
             cursor: pointer;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-top: 5px;
+            color: #aaa;
+        }
+        
+        /* Эквалайзер панель - ЧБ ПАЛИТРА БЕЗ СКРУГЛЕНИЙ */
+        .eq-panel {
+            width: 95vw;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 25px;
+            background: linear-gradient(to bottom, #000, #222); /* ЧБ градиент */
+            border: 2px solid #444; /* Резкая граница */
+            display: none; /* Сначала скрыт */
+        }
+        
+        /* Стили для эквалайзера - ЧБ ПАЛИТРА */
+        .eq-slider-container {
+            margin: 20px 0;
         }
         
         .eq-label {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
-            color: #aaa;
-            margin-bottom: 5px;
+            font-size: 16px; /* БОЛЬШЕ */
+            font-weight: bold;
+            color: white; /* Белый текст */
+            margin-bottom: 10px;
+            text-transform: uppercase;
         }
         
-        /* Только VOLUME работает */
+        .eq-slider {
+            width: 100%;
+            height: 10px;
+            -webkit-appearance: none;
+            background: linear-gradient(to right, #111, #666); /* ЧБ градиент */
+            outline: none;
+        }
+        
+        .eq-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: white; /* Белый ползунок */
+            border: 2px solid #000; /* Черная обводка */
+            cursor: pointer;
+        }
+        
+        /* Рабочий ползунок VOLUME - отличается цветом */
         .volume-slider {
-            background: #555;
+            background: linear-gradient(to right, #111, #888);
         }
         
         .volume-slider::-webkit-slider-thumb {
-            background: #ff4444;
-        }
-        
-        /* Неактивные ползунки */
-        .disabled-slider {
-            opacity: 0.3;
-            pointer-events: none;
+            background: #fff;
+            border: 2px solid #000;
         }
         
         /* Аудио элемент скрыт */
         #audioPlayer {
             display: none;
+        }
+        
+        /* Состояния */
+        .playing {
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -149,66 +185,104 @@
         </button>
     </div>
     
-    <!-- Панель эквалайзера -->
+    <!-- Ползунок перемотки -->
+    <div class="seek-container">
+        <input type="range" class="seek-slider" id="seekSlider" min="0" max="100" value="0">
+        <div class="time-display">
+            <span id="currentTime">0:00</span>
+            <span id="totalTime">0:00</span>
+        </div>
+    </div>
+    
+    <!-- Панель эквалайзера - ЧБ ПАЛИТРА -->
     <div class="eq-panel" id="eqPanel">
-        <!-- Много ползунков для вида -->
-        <div class="eq-label">
-            <span>BASS</span>
-            <span>0db</span>
+        <!-- Много ползунков - ВСЕ КРУТЯТСЯ, только VOLUME реально работает -->
+        <div class="eq-slider-container">
+            <div class="eq-label">
+                <span>BASS</span>
+                <span id="bassValue">0db</span>
+            </div>
+            <input type="range" class="eq-slider" id="bassSlider" min="-12" max="12" value="0">
         </div>
-        <input type="range" class="eq-slider disabled-slider" min="-12" max="12" value="0">
         
-        <div class="eq-label">
-            <span>MID</span>
-            <span>0db</span>
+        <div class="eq-slider-container">
+            <div class="eq-label">
+                <span>MID</span>
+                <span id="midValue">0db</span>
+            </div>
+            <input type="range" class="eq-slider" id="midSlider" min="-12" max="12" value="0">
         </div>
-        <input type="range" class="eq-slider disabled-slider" min="-12" max="12" value="0">
         
-        <div class="eq-label">
-            <span>TREBLE</span>
-            <span>0db</span>
+        <div class="eq-slider-container">
+            <div class="eq-label">
+                <span>TREBLE</span>
+                <span id="trebleValue">0db</span>
+            </div>
+            <input type="range" class="eq-slider" id="trebleSlider" min="-12" max="12" value="0">
         </div>
-        <input type="range" class="eq-slider disabled-slider" min="-12" max="12" value="0">
         
-        <!-- ЕЩЕ ползунки для вида -->
-        <div class="eq-label">
-            <span>LOW</span>
-            <span>0db</span>
+        <div class="eq-slider-container">
+            <div class="eq-label">
+                <span>LOW</span>
+                <span id="lowValue">0db</span>
+            </div>
+            <input type="range" class="eq-slider" id="lowSlider" min="-12" max="12" value="0">
         </div>
-        <input type="range" class="eq-slider disabled-slider" min="-12" max="12" value="0">
         
-        <div class="eq-label">
-            <span>HIGH</span>
-            <span>0db</span>
+        <div class="eq-slider-container">
+            <div class="eq-label">
+                <span>HIGH</span>
+                <span id="highValue">0db</span>
+            </div>
+            <input type="range" class="eq-slider" id="highSlider" min="-12" max="12" value="0">
         </div>
-        <input type="range" class="eq-slider disabled-slider" min="-12" max="12" value="0">
         
-        <!-- ЕЩЕ ползунки -->
-        <div class="eq-label">
-            <span>GAIN</span>
-            <span>0db</span>
+        <div class="eq-slider-container">
+            <div class="eq-label">
+                <span>GAIN</span>
+                <span id="gainValue">0db</span>
+            </div>
+            <input type="range" class="eq-slider" id="gainSlider" min="-12" max="12" value="0">
         </div>
-        <input type="range" class="eq-slider disabled-slider" min="-12" max="12" value="0">
         
         <!-- Единственный рабочий ползунок VOLUME -->
-        <div class="eq-label">
-            <span>VOLUME</span>
-            <span id="volumeValue">50%</span>
+        <div class="eq-slider-container">
+            <div class="eq-label">
+                <span>VOLUME</span>
+                <span id="volumeValue">50%</span>
+            </div>
+            <input type="range" class="eq-slider volume-slider" id="volumeSlider" min="0" max="100" value="50">
         </div>
-        <input type="range" class="eq-slider volume-slider" id="volumeSlider" min="0" max="100" value="50">
         
-        <!-- ЕЩЕ нерабочие ползунки -->
-        <div class="eq-label">
-            <span>FX</span>
-            <span>off</span>
+        <!-- ЕЩЕ нерабочие но крутящиеся ползунки -->
+        <div class="eq-slider-container">
+            <div class="eq-label">
+                <span>FX</span>
+                <span id="fxValue">off</span>
+            </div>
+            <input type="range" class="eq-slider" id="fxSlider" min="0" max="10" value="0">
         </div>
-        <input type="range" class="eq-slider disabled-slider" min="0" max="10" value="0">
+        
+        <div class="eq-slider-container">
+            <div class="eq-label">
+                <span>REVERB</span>
+                <span id="reverbValue">0%</span>
+            </div>
+            <input type="range" class="eq-slider" id="reverbSlider" min="0" max="100" value="0">
+        </div>
+        
+        <div class="eq-slider-container">
+            <div class="eq-label">
+                <span>DELAY</span>
+                <span id="delayValue">0ms</span>
+            </div>
+            <input type="range" class="eq-slider" id="delaySlider" min="0" max="500" value="0">
+        </div>
     </div>
     
     <!-- Аудио элемент -->
-    <audio id="audioPlayer" loop>
-        <!-- Здесь должен быть ваш аудиофайл -->
-        <!-- <source src="music/hard.mp3" type="audio/mpeg"> -->
+    <audio id="audioPlayer">
+        <source src="w.mp3" type="audio/mpeg">
     </audio>
     
     <!-- Аудио для кликов -->
@@ -224,13 +298,40 @@
         const eqBtn = document.getElementById('eqBtn');
         const eqPanel = document.getElementById('eqPanel');
         const audioPlayer = document.getElementById('audioPlayer');
+        const clickSound = document.getElementById('clickSound');
+        
+        // Ползунки перемотки
+        const seekSlider = document.getElementById('seekSlider');
+        const currentTimeEl = document.getElementById('currentTime');
+        const totalTimeEl = document.getElementById('totalTime');
+        
+        // Ползунки эквалайзера
         const volumeSlider = document.getElementById('volumeSlider');
         const volumeValue = document.getElementById('volumeValue');
-        const clickSound = document.getElementById('clickSound');
+        
+        const bassSlider = document.getElementById('bassSlider');
+        const bassValue = document.getElementById('bassValue');
+        const midSlider = document.getElementById('midSlider');
+        const midValue = document.getElementById('midValue');
+        const trebleSlider = document.getElementById('trebleSlider');
+        const trebleValue = document.getElementById('trebleValue');
+        const lowSlider = document.getElementById('lowSlider');
+        const lowValue = document.getElementById('lowValue');
+        const highSlider = document.getElementById('highSlider');
+        const highValue = document.getElementById('highValue');
+        const gainSlider = document.getElementById('gainSlider');
+        const gainValue = document.getElementById('gainValue');
+        const fxSlider = document.getElementById('fxSlider');
+        const fxValue = document.getElementById('fxValue');
+        const reverbSlider = document.getElementById('reverbSlider');
+        const reverbValue = document.getElementById('reverbValue');
+        const delaySlider = document.getElementById('delaySlider');
+        const delayValue = document.getElementById('delayValue');
         
         // Состояние
         let isPlaying = false;
         let eqVisible = false;
+        let updateSeekInterval;
         
         // Функция для воспроизведения звука клика
         function playClickSound() {
@@ -238,22 +339,61 @@
             clickSound.play().catch(e => console.log('Sound error:', e));
         }
         
+        // Форматирование времени
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+        
+        // Обновление времени трека
+        function updateTimeDisplay() {
+            currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+            totalTimeEl.textContent = formatTime(audioPlayer.duration || 0);
+            
+            if (audioPlayer.duration) {
+                const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                seekSlider.value = percent;
+            }
+        }
+        
+        // Инициализация аудио
+        audioPlayer.addEventListener('loadedmetadata', function() {
+            totalTimeEl.textContent = formatTime(audioPlayer.duration);
+            updateTimeDisplay();
+        });
+        
+        audioPlayer.addEventListener('timeupdate', updateTimeDisplay);
+        
+        // Перемотка
+        seekSlider.addEventListener('input', function() {
+            if (audioPlayer.duration) {
+                const seekTime = (this.value / 100) * audioPlayer.duration;
+                audioPlayer.currentTime = seekTime;
+            }
+        });
+        
         // Кнопка Play
         playBtn.addEventListener('click', function() {
             playClickSound();
-            // Здесь будет логика воспроизведения трека
-            // audioPlayer.play();
+            audioPlayer.play();
             isPlaying = true;
-            console.log('Play pressed');
+            playBtn.classList.add('playing');
+            pauseBtn.classList.remove('playing');
+            
+            // Запуск обновления ползунка
+            clearInterval(updateSeekInterval);
+            updateSeekInterval = setInterval(updateTimeDisplay, 500);
         });
         
         // Кнопка Pause
         pauseBtn.addEventListener('click', function() {
             playClickSound();
-            // Здесь будет логика паузы трека
-            // audioPlayer.pause();
+            audioPlayer.pause();
             isPlaying = false;
-            console.log('Pause pressed');
+            pauseBtn.classList.add('playing');
+            playBtn.classList.remove('playing');
+            clearInterval(updateSeekInterval);
         });
         
         // Кнопка EQ - показать/скрыть панель эквалайзера
@@ -261,47 +401,70 @@
             playClickSound();
             eqVisible = !eqVisible;
             eqPanel.style.display = eqVisible ? 'block' : 'none';
-            console.log('EQ panel:', eqVisible ? 'visible' : 'hidden');
         });
         
         // Единственный рабочий ползунок - VOLUME
         volumeSlider.addEventListener('input', function() {
             const value = this.value;
             volumeValue.textContent = value + '%';
-            
-            // Здесь будет управление громкостью
-            // audioPlayer.volume = value / 100;
-            console.log('Volume changed to:', value + '%');
+            audioPlayer.volume = value / 100;
         });
         
-        // Для вида меняем значения у нерабочих ползунков при наведении
-        document.querySelectorAll('.disabled-slider').forEach(slider => {
-            slider.addEventListener('mouseover', function() {
-                this.title = 'Not functional (only VOLUME works)';
-            });
+        // Все ползунки КРУТЯТСЯ, но только VOLUME реально работает
+        // Ползунки просто меняют значения на экране
+        bassSlider.addEventListener('input', function() {
+            bassValue.textContent = this.value + 'db';
+        });
+        
+        midSlider.addEventListener('input', function() {
+            midValue.textContent = this.value + 'db';
+        });
+        
+        trebleSlider.addEventListener('input', function() {
+            trebleValue.textContent = this.value + 'db';
+        });
+        
+        lowSlider.addEventListener('input', function() {
+            lowValue.textContent = this.value + 'db';
+        });
+        
+        highSlider.addEventListener('input', function() {
+            highValue.textContent = this.value + 'db';
+        });
+        
+        gainSlider.addEventListener('input', function() {
+            gainValue.textContent = this.value + 'db';
+        });
+        
+        fxSlider.addEventListener('input', function() {
+            const val = this.value;
+            fxValue.textContent = val === '0' ? 'off' : val;
+        });
+        
+        reverbSlider.addEventListener('input', function() {
+            reverbValue.textContent = this.value + '%';
+        });
+        
+        delaySlider.addEventListener('input', function() {
+            delayValue.textContent = this.value + 'ms';
         });
         
         // Авто-размер кнопок под ширину экрана
         function resizeControls() {
-            const containerWidth = window.innerWidth - 40; // минус padding
+            const containerWidth = window.innerWidth - 70; // минус padding и gap
             const btnCount = 3;
-            const gap = 10;
+            const gap = 15;
             const btnWidth = (containerWidth - (gap * (btnCount - 1))) / btnCount;
             
             document.querySelectorAll('.control-btn').forEach(btn => {
                 btn.style.maxWidth = btnWidth + 'px';
-                btn.style.height = (btnWidth * 0.7) + 'px'; // пропорциональная высота
+                btn.style.height = (btnWidth * 0.8) + 'px';
             });
         }
         
         // Ресайз при изменении размера окна
         window.addEventListener('resize', resizeControls);
-        resizeControls(); // Инициализация
-        
-        // Если нет аудиофайла, показываем сообщение
-        if (!audioPlayer.src) {
-            console.log('No audio file loaded. Add your audio file to <audio id="audioPlayer">');
-        }
+        resizeControls();
     });
     </script>
 </body>
