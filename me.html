@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ME</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="b">
+    <!-- Шапка с текстом и кнопкой BACK -->
+    <div class="me-header">
+        <div class="me-text">0981209429084901480491049-0</div>
+        <button class="styled-btn back-btn" onclick="window.location.href='index.html'">
+            <span class="btn-text">BACK</span>
+        </button>
+    </div>
+
+    <!-- Основной контент с теми же эффектами -->
+    <div class="viewport">
+        <img src="_assets/03.jpg" alt="Image 03">
+        <img src="_assets/04.jpg" alt="Image 04" style="display:none;">
+
+        <div class="pages">
+            <div class="page a">
+                <center>
+                    <p>
+                        PERSONAL PAGE
+                        <br>SECRET CONTENT
+                    </p>
+                </center>
+            </div>
+
+            <div class="page">
+                <center>
+                    <p>
+                        ADDITIONAL CONTENT
+                        <br>CONTINUE SCROLLING
+                    </p>
+                </center>
+            </div>
+        </div>
+    </div>
+
+    <!-- Аудио для клика -->
+    <audio id="clickSound" preload="auto">
+        <source src="sounds/click.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
