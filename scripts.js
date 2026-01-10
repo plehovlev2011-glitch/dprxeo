@@ -1,113 +1,107 @@
 $(function(){
-    // Упрощенная версия - только эффект скролла изображений
+    // ОРИГИНАЛЬНЫЙ РАБОЧИЙ КОД SOPHIE
     setTimeout(function(){
         scrollTo(0,-1);
     },0);
 
-    var currentPage = 0;
-    var totalPages = $('.page').length;
-    var isAnimating = false;
+    var i = 1;
+    var t = 1;
+    var imgt = 1;
+    var down = 0;
+    var timer = 0;
 
     $("html,body").scrollTop(0);
 
-    // Настройка изображений
     $("img").width($(window).width());
-    $("img").height($(window).height());
 
-    // Клик для начала скролла
-    $(window).on("click",function(e){
-        if($(e.target).closest('.styled-btn').length === 0 && !isAnimating){
-            if($(window).scrollTop() == 0){
-                nextPage();
-            }
+    $(window).on("click",function(){
+        if($(window).scrollTop() == 0){
+            $("html,body").animate({"scrollTop":$(".viewport").height()})
         }
     })
 
-    // Скролл колесиком/свайпом
-    $(window).on("wheel touchmove", function(e){
-        if(isAnimating) return false;
-        
-        var delta = e.originalEvent.deltaY || 
-                   (e.originalEvent.touches ? 
-                    e.originalEvent.touches[0].clientY - lastTouchY : 0);
-        
-        if(Math.abs(delta) > 10){
-            if(delta > 0 && currentPage < totalPages - 1){
-                nextPage();
-            } else if(delta < 0 && currentPage > 0){
-                prevPage();
-            }
-            return false;
-        }
-    });
-
-    var lastTouchY = 0;
-    $(window).on('touchstart', function(e){
-        lastTouchY = e.originalEvent.touches[0].clientY;
-    });
-
-    function nextPage(){
-        if(currentPage >= totalPages - 1 || isAnimating) return;
-        
-        isAnimating = true;
-        currentPage++;
-        
-        // Анимация скролла
-        $("html,body").animate({
-            scrollTop: $(window).height() * currentPage
-        }, 800, function(){
-            isAnimating = false;
-        });
-        
-        // Переключение страниц
-        $(".page").removeClass("a");
-        $(".page").eq(currentPage).addClass("a");
-        
-        // Эффект переключения изображений
-        if(currentPage % 2 == 0){
-            $("img").eq(0).show();
-            $("img").eq(1).hide();
-        } else {
-            $("img").eq(0).hide();
-            $("img").eq(1).show();
-        }
-    }
-
-    function prevPage(){
-        if(currentPage <= 0 || isAnimating) return;
-        
-        isAnimating = true;
-        currentPage--;
-        
-        $("html,body").animate({
-            scrollTop: $(window).height() * currentPage
-        }, 800, function(){
-            isAnimating = false;
-        });
-        
-        $(".page").removeClass("a");
-        $(".page").eq(currentPage).addClass("a");
-        
-        if(currentPage % 2 == 0){
-            $("img").eq(0).show();
-            $("img").eq(1).hide();
-        } else {
-            $("img").eq(0).hide();
-            $("img").eq(1).show();
-        }
-    }
-
     function init(){
         $("img").width($(window).width());
-        $("img").height($(window).height());
     }
 
     $(window).on("resize",function(){
         init();
     });
 
-    // ================================================
-    // ДОБАВЛЕННЫЙ КОД ДЛЯ КНОПОК
+    $(window).on("scroll",function(){
+        var cur = $(window).scrollTop();
+        
+        //Image sizing
+        if(t == 0){
+            var math = cur - $(".viewport").height()*(i-1);
+            $("img").height(math);
+        }else{
+            var math = $(".viewport").height()*(i)- cur;
+            $("img").height(math);
+        }
+
+        //trigger
+        if(cur > $(".viewport").height()*i){
+            i++;
+            togglePosition();
+            $("html,body").height($("html,body").height()+$(".viewport").height())
+        }
+
+        //scrolling up
+        if(cur + 5 < $(".viewport").height()*i - ($(".viewport").height())){
+            i--;
+            togglePosition();
+            down = 1;
+        }
+
+        //reset 
+        if(cur <= 0){
+            $(".page.a").removeClass("a");
+            $(".page").eq(0).addClass("a");
+        }
+
+        //change text - ЭТА ФУНКЦИЯ ПЕРЕКЛЮЧАЕТ СТРАНИЦЫ!
+        if($("img").height() == $(".viewport").height() && cur > 10){
+            if(timer == 0){
+                timer = 1;
+                text();
+                setTimeout(function(){
+                    timer = 0;
+                },300)
+            }
+        }
+
+        //alternate images
+        if($("img").height() <= 0){
+            if (imgt%2 == 0){
+                $("img").hide().eq(1).show();
+            }else{
+                $("img").hide().eq(0).show();
+            }
+            imgt++;
+        }
+    });
+
+    function togglePosition(){
+        if (i%2 == 0){
+            t = 0;
+            $("img").css({"top":"auto","bottom":"0"});
+        }else{
+            t = 1;
+            $("img").css({"top":"0","bottom":"auto"});
+        }
+    }
+
+    function text(){
+        if($(".page.a").next().length == 0){
+            $(".page.a").removeClass("a");
+            $(".page").eq(0).addClass("a");
+        }else{
+            $(".page.a").removeClass("a").next().addClass("a");
+        }
+    }
+});    // ================================================
+    // ДОБАВЛЕННЫЙ КОД ДЛЯ КНОПОК (ПОСЛЕ ОРИГИНАЛЬНОГО КОДА)
     // ================================================
 
     // Инициализация аудио
@@ -168,4 +162,3 @@ $(function(){
             }
         }, 200);
     });
-});
