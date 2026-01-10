@@ -1,239 +1,186 @@
-/* Подключение шрифта Arial Narrow */
-@font-face {
-    font-family: 'Arial Narrow';
-    src: url('111.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-*{
-    margin:0;
-    padding:0;
-    list-style-type: none;
-}
-
-html,body{
-    width:100%;
-    height:100%;
-    font-family: 'Arial Narrow', Arial, sans-serif;
-    font-weight:bold;
-    background:hsl(0,0%,5%);
-    color:white;
-    overflow: hidden;
-}
-
-/* Секретная страница */
-.secret-page {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: black;
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Простой текст шифра */
-.cipher-text {
-    font-family: 'Arial Narrow', Arial, sans-serif;
-    font-size: 20px;
-    color: white;
-    text-align: center;
-    margin-bottom: 30px;
-    padding: 0 20px;
-    word-break: break-all;
-    max-width: 90%;
-}
-
-/* Горизонтальные изображения */
-.horizontal-images {
-    display: flex;
-    gap: 20px;
-    padding: 0 20px;
-    max-width: 90%;
-    overflow-x: auto;
-    margin-bottom: 30px;
-}
-
-.horizontal-images img {
-    width: auto;
-    height: 300px;
-    max-width: 100%;
-    object-fit: contain;
-}
-
-/* Стили для кнопок */
-.buttons-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    width: auto;
-    margin: 0 auto;
-}
-
-.styled-btn {
-    position: relative;
-    width: 180px;
-    height: 45px;
-    background: white;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-    transition: all 0.2s ease;
-    transform: translateZ(0);
-    line-height: 0;
-}
-
-.styled-btn:hover {
-    transform: translateZ(0) translateY(-2px);
-    background: #f5f5f5;
-}
-
-.styled-btn:active {
-    transform: translateZ(0) translateY(0);
-    background: #e0e0e0;
-}
-
-/* Эффект клика */
-.styled-btn.clicked {
-    animation: clickEffect 0.15s ease-out;
-}
-
-@keyframes clickEffect {
-    0% { transform: translateZ(0) scale(1); }
-    50% { transform: translateZ(0) scale(0.97); }
-    100% { transform: translateZ(0) scale(1); }
-}
-
-.btn-text {
-    position: relative;
-    z-index: 2;
-    font-family: 'Arial Narrow', Arial, sans-serif;
-    font-size: 24px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: black;
-    display: block;
-    line-height: 45px;
-    height: 45px;
-    margin: 0;
-    padding: 0;
-    transition: all 0.2s;
-}
-
-.styled-btn:hover .btn-text {
-    letter-spacing: 3px;
-}
-
-/* Адаптивность */
-@media screen and (max-width: 768px) {
-    .horizontal-images img {
-        height: 200px;
+$(function(){
+    // Инициализация аудио
+    var clickSound = document.getElementById('clickSound');
+    
+    // Функция для воспроизведения звука
+    function playClickSound() {
+        if (clickSound) {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(function(error) {
+                console.log('Audio play failed:', error);
+            });
+        }
     }
     
-    .cipher-text {
-        font-size: 16px;
+    // Функция для анимации клика
+    function animateClick(button) {
+        $(button).addClass('clicked');
+        setTimeout(function() {
+            $(button).removeClass('clicked');
+        }, 150);
     }
     
-    .buttons-container {
-        gap: 15px;
-    }
+    // Переход на секретную страницу
+    $('#goToSecret').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        playClickSound();
+        animateClick(this);
+        
+        // Скрываем основную страницу, показываем секретную
+        setTimeout(function() {
+            $('.main-viewport').hide();
+            $('.secret-page').show();
+        }, 200);
+    });
     
-    .styled-btn {
-        width: 160px;
-        height: 40px;
-    }
+    // Возврат с секретной страницы
+    $('#goBack').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        playClickSound();
+        animateClick(this);
+        
+        // Возвращаемся на основную страницу
+        setTimeout(function() {
+            $('.secret-page').hide();
+            $('.main-viewport').show();
+        }, 200);
+    });
     
-    .btn-text {
-        font-size: 22px;
-        line-height: 40px;
-        height: 40px;
-    }
-}
+    // Обработчики для кнопок с ссылками
+    $('.styled-btn:not(#goToSecret):not(#goBack)').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var link = $(this).data('link');
+        
+        playClickSound();
+        animateClick(this);
+        
+        // Переход по ссылке с задержкой
+        setTimeout(function() {
+            if (link) {
+                if (link.startsWith('http') || link.startsWith('https')) {
+                    window.open(link, '_blank');
+                } else if (link.startsWith('t.me')) {
+                    window.open('https://' + link, '_blank');
+                } else {
+                    window.open('https://' + link, '_blank');
+                }
+            }
+        }, 200);
+    });
+    
+    // ОРИГИНАЛЬНЫЙ КОД SOPHIE (оставляем только то, что работает)
+    setTimeout(function(){
+        scrollTo(0,-1);
+    },0);
 
-@media screen and (max-width: 480px) {
-    .horizontal-images {
-        gap: 10px;
-    }
-    
-    .horizontal-images img {
-        height: 150px;
-    }
-    
-    .cipher-text {
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-    
-    .buttons-container {
-        gap: 12px;
-    }
-    
-    .styled-btn {
-        width: 140px;
-        height: 35px;
-    }
-    
-    .btn-text {
-        font-size: 20px;
-        line-height: 35px;
-        height: 35px;
-        letter-spacing: 1px;
-    }
-    
-    .styled-btn:hover .btn-text {
-        letter-spacing: 2px;
-    }
-}
+    var i = 1;
+    var t = 1;
+    var imgt = 1;
+    var down = 0;
+    var timer = 0;
 
-/* Оригинальные стили SOPHIE */
-.viewport{
-    position: fixed;
-    width:100%;
-    height:100vh;
-    z-index:3;
-}
+    $("html,body").scrollTop(0);
 
-.viewport img{
-    z-index: 3;
-    background:black;
-    height:100vh;
-    width: 100%;
-    object-fit: cover;
-}
+    $(".main-viewport img").width($(window).width());
 
-.page{
-    display: none;
-    width:100%;
-    height:100vh;
-}
+    $(window).on("click",function(e){
+        // Проверяем, не кликнули ли по кнопке
+        if ($(e.target).closest('.styled-btn').length === 0) {
+            if($(window).scrollTop() == 0){
+                $("html,body").animate({"scrollTop":$(".viewport").height()})
+            }
+        }
+    })
 
-.page.a{
-    display: block;
-}
+    function init(){
+        $(".main-viewport img").width($(window).width());
+    }
 
-center{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:100%;
-    -webkit-transform:translate(-50%,-50%);
-    transform:translate(-50%,-50%);
-}
+    $(window).on("resize",function(){
+        init();
+    });
 
-p,li,input{
-    line-height: 75px;
-    text-align:center;
-    font-size:14px;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    font-family: 'Arial Narrow', Arial, sans-serif;
-}
+    $(window).on("scroll",function(){
+        // Если на секретной странице - отключаем скролл эффект
+        if ($('.secret-page').is(':visible')) {
+            return;
+        }
+        
+        var cur = $(window).scrollTop();
+        
+        //Image sizing
+        if(t == 0){
+            var math = cur - $(".viewport").height()*(i-1);
+            $(".main-viewport img").height(math);
+        }else{
+            var math = $(".viewport").height()*(i)- cur;
+            $(".main-viewport img").height(math);
+        }
+
+        //trigger
+        if(cur > $(".viewport").height()*i){
+            i++;
+            togglePosition();
+            $("html,body").height($("html,body").height()+$(".viewport").height())
+        }
+
+        //scrolling up
+        if(cur + 5 < $(".viewport").height()*i - ($(".viewport").height())){
+            i--;
+            togglePosition();
+            down = 1;
+        }
+
+        //reset 
+        if(cur <= 0){
+            $(".page.a").removeClass("a");
+            $(".page").eq(0).addClass("a");
+        }
+
+        //change text
+        if($(".main-viewport img").height() == $(".viewport").height() && cur > 10){
+            if(timer == 0){
+                timer = 1;
+                text();
+                setTimeout(function(){
+                    timer = 0;
+                },300)
+            }
+        }
+
+        //alternate images
+        if($(".main-viewport img").height() <= 0){
+            if (imgt%2 == 0){
+                $(".main-viewport img").hide().eq(1).show();
+            }else{
+                $(".main-viewport img").hide().eq(0).show();
+            }
+            imgt++;
+        }
+    });
+
+    function togglePosition(){
+        if (i%2 == 0){
+            t = 0;
+            $(".main-viewport img").css({"top":"auto","bottom":"0"});
+        }else{
+            t = 1;
+            $(".main-viewport img").css({"top":"0","bottom":"auto"});
+        }
+    }
+
+    function text(){
+        if($(".page.a").next().length == 0){
+            $(".page.a").removeClass("a");
+            $(".page").eq(0).addClass("a");
+        }else{
+            $(".page.a").removeClass("a").next().addClass("a");
+        }
+    }
+});
