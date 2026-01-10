@@ -8,35 +8,38 @@ $(function(){
     var imgt = 1;
     var down = 0;
     var timer = 0;
+    
+    // Переменные для карусели
+    var currentSlide = 0;
+    var totalSlides = $('.carousel-slide').length;
+    var carouselTrack = $('.carousel-track');
+    var carouselWidth = $('.horizontal-carousel').width();
 
     // Инициализация аудио
     var clickSound = document.getElementById('clickSound');
     
-    // Обработчики для кнопок
-    $('.styled-btn').on('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        var link = $(this).data('link');
-        
-        // Воспроизведение звука
+    // Функция для воспроизведения звука
+    function playClickSound() {
         if (clickSound) {
             clickSound.currentTime = 0;
             clickSound.play().catch(function(error) {
                 console.log('Audio play failed:', error);
             });
         }
-        
-        // Анимация нажатия
-        $(this).addClass('clicked');
+    }
+    
+    // Функция для анимации клика
+    function animateClick(button) {
+        $(button).addClass('clicked');
         setTimeout(function() {
-            $(this).removeClass('clicked');
-        }.bind(this), 300);
-        
-        // Переход по ссылке с задержкой
+            $(button).removeClass('clicked');
+        }, 150);
+    }
+    
+    // Функция перехода по ссылке
+    function navigateToLink(link) {
         setTimeout(function() {
             if (link) {
-                // Проверяем, нужен ли протокол
                 if (link.startsWith('http') || link.startsWith('https')) {
                     window.open(link, '_blank');
                 } else if (link.startsWith('t.me')) {
@@ -45,7 +48,108 @@ $(function(){
                     window.open('https://' + link, '_blank');
                 }
             }
-        }, 200); // Задержка для звука
+        }, 200);
+    }
+    
+    // Функция для карусели
+    function updateCarousel() {
+        var translateX = -currentSlide * 100;
+        carouselTrack.css('transform', 'translateX(' + translateX + '%)');
+        
+        // Обновляем активную точку
+        $('.dot').removeClass('active');
+        $('.dot[data-slide="' + currentSlide + '"]').addClass('active');
+    }
+    
+    // Обработчики для кнопок навигации
+    $('.next-nav').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        playClickSound();
+        animateClick(this);
+        
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateCarousel();
+    });
+    
+    $('.prev-nav').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        playClickSound();
+        animateClick(this);
+        
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+    });
+    
+    // Обработчики для точек
+    $('.dot').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        playClickSound();
+        animateClick(this);
+        
+        currentSlide = parseInt($(this).data('slide'));
+        updateCarousel();
+    });
+    
+    // Обработчик для кнопки ME (переход на секретную страницу)
+    $('.me-btn').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        playClickSound();
+        animateClick(this);
+        
+        // Переключаем на секретную страницу
+        setTimeout(function() {
+            // Прокручиваем к началу
+            $("html,body").scrollTop(0);
+            
+            // Показываем секретную страницу
+            $('.page').removeClass('a');
+            $('.secret-page').addClass('a');
+            
+            // Сбрасываем индексы для скролла
+            i = 1;
+            t = 1;
+            
+            // Обновляем высоту body для скролла
+            $("html,body").height($(".viewport").height() * 3);
+        }, 200);
+    });
+    
+    // Обработчик для кнопки BACK
+    $('.back-btn').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        playClickSound();
+        animateClick(this);
+        
+        // Возвращаемся на страницу с кнопками
+        setTimeout(function() {
+            $("html,body").scrollTop(0);
+            $('.page').removeClass('a');
+            $('.page').eq(1).addClass('a'); // Вторая страница с кнопками
+            
+            // Сбрасываем индексы
+            i = 1;
+            t = 1;
+            $("html,body").height($(".viewport").height() * 3);
+        }, 200);
+    });
+    
+    // Обработчики для обычных кнопок (ссылки)
+    $('.styled-btn:not(.me-btn):not(.back-btn)').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var link = $(this).data('link');
+        
+        playClickSound();
+        animateClick(this);
+        navigateToLink(link);
     });
 
     $("html,body").scrollTop(0);
@@ -53,8 +157,8 @@ $(function(){
     $("img").width($(window).width());
 
     $(window).on("click",function(e){
-        // Проверяем, не кликнули ли по кнопке
-        if ($(e.target).closest('.styled-btn').length === 0) {
+        // Проверяем, не кликнули ли по кнопке или элементам карусели
+        if ($(e.target).closest('.styled-btn, .carousel-nav, .dot').length === 0) {
             if($(window).scrollTop() == 0){
                 $("html,body").animate({"scrollTop":$(".viewport").height()})
             }
@@ -63,6 +167,8 @@ $(function(){
 
     function init(){
         $("img").width($(window).width());
+        // Обновляем ширину карусели при ресайзе
+        carouselWidth = $('.horizontal-carousel').width();
     }
 
     $(window).on("resize",function(){
@@ -71,6 +177,11 @@ $(function(){
 
     $(window).on("scroll",function(){
         var cur = $(window).scrollTop();
+        
+        // Пропускаем логику скролла если на секретной странице
+        if ($('.secret-page').hasClass('a')) {
+            return;
+        }
         
         //Image sizing
         if(t == 0){
