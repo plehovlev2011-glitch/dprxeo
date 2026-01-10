@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>play</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: hidden;
+        }
+        
+        /* Обложка трека */
+        .cover {
+            width: 100vw;
+            height: 60vh;
+            object-fit: cover;
+            display: block;
+        }
+        
+        /* Название трека */
+        .track-title {
+            margin: 20px 0;
+            font-size: 18px;
+            text-align: center;
+            padding: 0 20px;
+        }
+        
+        /* Контейнер для кнопок плей/пауза/эквалайзер */
+        .controls-container {
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 20px;
+            margin: 20px 0;
+        }
+        
+        /* Кнопки одинаковой ширины */
+        .control-btn {
+            flex: 1;
+            max-width: 30vw;
+            height: 60px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* Эквалайзер панель */
+        .eq-panel {
+            width: 90vw;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(40, 40, 40, 0.8);
+            border-radius: 10px;
+            display: none; /* Сначала скрыт */
+        }
+        
+        /* Стили для эквалайзера - много ползунков для вида */
+        .eq-slider {
+            width: 100%;
+            margin: 15px 0;
+            -webkit-appearance: none;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .eq-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .eq-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        /* Только VOLUME работает */
+        .volume-slider {
+            background: #555;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            background: #ff4444;
+        }
+        
+        /* Неактивные ползунки */
+        .disabled-slider {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        /* Аудио элемент скрыт */
+        #audioPlayer {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Обложка трека -->
+    <img src="/buttons/cover.jpg" alt="Track Cover" class="cover">
+    
+    <!-- Название трека -->
+    <div class="track-title">
+        hard by sophie (a.g.cook remix) slowed
+    </div>
+    
+    <!-- Контейнер для кнопок управления -->
+    <div class="controls-container">
+        <!-- Кнопка Play -->
+        <button class="control-btn" id="playBtn" 
+                style="background-image: url('/buttons/play.png')">
+        </button>
+        
+        <!-- Кнопка Pause -->
+        <button class="control-btn" id="pauseBtn" 
+                style="background-image: url('/buttons/pause.png')">
+        </button>
+        
+        <!-- Кнопка EQ -->
+        <button class="control-btn" id="eqBtn" 
+                style="background-image: url('/buttons/eq.png')">
+        </button>
+    </div>
+    
+    <!-- Панель эквалайзера -->
+    <div class="eq-panel" id="eqPanel">
+        <!-- Много ползунков для вида -->
+        <div class="eq-label">
+            <span>BASS</span>
+            <span>0db</span>
+        </div>
+        <input type="range" class="eq-slider disabled-slider" min="-12" max="12" value="0">
+        
+        <div class="eq-label">
+            <span>MID</span>
+            <span>0db</span>
+        </div>
+        <input type="range" class="eq-slider disabled-slider" min="-12" max="12" value="0">
+        
+        <div class="eq-label">
+            <span>TREBLE</span>
+            <span>0db</span>
+        </div>
+        <input type="range" class="eq-slider disabled-slider" min="-12" max="12" value="0">
+        
+        <!-- ЕЩЕ ползунки для вида -->
+        <div class="eq-label">
+            <span>LOW</span>
+            <span>0db</span>
+        </div>
+        <input type="range" class="eq-slider disabled-slider" min="-12" max="12" value="0">
+        
+        <div class="eq-label">
+            <span>HIGH</span>
+            <span>0db</span>
+        </div>
+        <input type="range" class="eq-slider disabled-slider" min="-12" max="12" value="0">
+        
+        <!-- ЕЩЕ ползунки -->
+        <div class="eq-label">
+            <span>GAIN</span>
+            <span>0db</span>
+        </div>
+        <input type="range" class="eq-slider disabled-slider" min="-12" max="12" value="0">
+        
+        <!-- Единственный рабочий ползунок VOLUME -->
+        <div class="eq-label">
+            <span>VOLUME</span>
+            <span id="volumeValue">50%</span>
+        </div>
+        <input type="range" class="eq-slider volume-slider" id="volumeSlider" min="0" max="100" value="50">
+        
+        <!-- ЕЩЕ нерабочие ползунки -->
+        <div class="eq-label">
+            <span>FX</span>
+            <span>off</span>
+        </div>
+        <input type="range" class="eq-slider disabled-slider" min="0" max="10" value="0">
+    </div>
+    
+    <!-- Аудио элемент -->
+    <audio id="audioPlayer" loop>
+        <!-- Здесь должен быть ваш аудиофайл -->
+        <!-- <source src="music/hard.mp3" type="audio/mpeg"> -->
+    </audio>
+    
+    <!-- Аудио для кликов -->
+    <audio id="clickSound" preload="auto">
+        <source src="sounds/click.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Элементы
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const eqBtn = document.getElementById('eqBtn');
+        const eqPanel = document.getElementById('eqPanel');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeValue = document.getElementById('volumeValue');
+        const clickSound = document.getElementById('clickSound');
+        
+        // Состояние
+        let isPlaying = false;
+        let eqVisible = false;
+        
+        // Функция для воспроизведения звука клика
+        function playClickSound() {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(e => console.log('Sound error:', e));
+        }
+        
+        // Кнопка Play
+        playBtn.addEventListener('click', function() {
+            playClickSound();
+            // Здесь будет логика воспроизведения трека
+            // audioPlayer.play();
+            isPlaying = true;
+            console.log('Play pressed');
+        });
+        
+        // Кнопка Pause
+        pauseBtn.addEventListener('click', function() {
+            playClickSound();
+            // Здесь будет логика паузы трека
+            // audioPlayer.pause();
+            isPlaying = false;
+            console.log('Pause pressed');
+        });
+        
+        // Кнопка EQ - показать/скрыть панель эквалайзера
+        eqBtn.addEventListener('click', function() {
+            playClickSound();
+            eqVisible = !eqVisible;
+            eqPanel.style.display = eqVisible ? 'block' : 'none';
+            console.log('EQ panel:', eqVisible ? 'visible' : 'hidden');
+        });
+        
+        // Единственный рабочий ползунок - VOLUME
+        volumeSlider.addEventListener('input', function() {
+            const value = this.value;
+            volumeValue.textContent = value + '%';
+            
+            // Здесь будет управление громкостью
+            // audioPlayer.volume = value / 100;
+            console.log('Volume changed to:', value + '%');
+        });
+        
+        // Для вида меняем значения у нерабочих ползунков при наведении
+        document.querySelectorAll('.disabled-slider').forEach(slider => {
+            slider.addEventListener('mouseover', function() {
+                this.title = 'Not functional (only VOLUME works)';
+            });
+        });
+        
+        // Авто-размер кнопок под ширину экрана
+        function resizeControls() {
+            const containerWidth = window.innerWidth - 40; // минус padding
+            const btnCount = 3;
+            const gap = 10;
+            const btnWidth = (containerWidth - (gap * (btnCount - 1))) / btnCount;
+            
+            document.querySelectorAll('.control-btn').forEach(btn => {
+                btn.style.maxWidth = btnWidth + 'px';
+                btn.style.height = (btnWidth * 0.7) + 'px'; // пропорциональная высота
+            });
+        }
+        
+        // Ресайз при изменении размера окна
+        window.addEventListener('resize', resizeControls);
+        resizeControls(); // Инициализация
+        
+        // Если нет аудиофайла, показываем сообщение
+        if (!audioPlayer.src) {
+            console.log('No audio file loaded. Add your audio file to <audio id="audioPlayer">');
+        }
+    });
+    </script>
+</body>
+</html>
