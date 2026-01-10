@@ -1,51 +1,44 @@
-$(function(){
-    // 1. Оригинальный скрипт скролла
+$(document).ready(function(){
+    // 1. Настройка
     $("html,body").scrollTop(0);
-    $("img").width($(window).width());
+    let currentPage = 0;
+    let currentImg = 0;
     
-    var currentImg = 0;
-    var scrolling = false;
-
-    // Клик начинает скролл
-    $(window).on("click", function(){
-        if(!scrolling && $(window).scrollTop() == 0){
-            scrolling = true;
-            $("html,body").animate({
-                scrollTop: $(window).height()
-            }, 1000, function(){
-                scrolling = false;
-                // Переключаем на вторую страницу
-                $(".page.a").removeClass("a");
-                $(".page").eq(1).addClass("a");
-                // Меняем картинку
-                $("img").eq(currentImg).hide();
-                currentImg = (currentImg + 1) % 2;
-                $("img").eq(currentImg).show();
-            });
+    // 2. Клик по экрану - скролл и смена страниц
+    $(window).on('click', function(){
+        if($(window).scrollTop() === 0){
+            // Скроллим вниз
+            $('html,body').animate({scrollTop: $(window).height()}, 800);
+            
+            // Меняем страницу
+            $('.page').removeClass('active');
+            currentPage = (currentPage + 1) % 2;
+            $('.page').eq(currentPage).addClass('active');
+            
+            // Меняем картинку
+            $('#img' + (currentImg + 1)).hide();
+            currentImg = (currentImg + 1) % 2;
+            $('#img' + (currentImg + 1)).show();
         }
     });
-
-    // 2. Форма email ведет на me.html со звуком
-    $(".subscribe-btn").on("click", function(){
-        // Воспроизводим звук
-        var audio = document.getElementById("clickSound");
-        audio.currentTime = 0;
-        audio.play();
+    
+    // 3. Кнопка SUBSCRIBE - переход на me.html со звуком
+    $('.subscribe-btn').on('click', function(){
+        // Звук
+        $('#click-sound')[0].play();
         
-        // Переходим на me.html через 300ms
+        // Переход через 0.3 секунды
         setTimeout(function(){
-            window.location.href = "me.html";
+            window.location.href = 'me.html';
         }, 300);
     });
-
-    // 3. Фокус на поле email
-    $(".email-input").on("focus", function(){
-        $(this).val("");
-    });
-
-    $(".email-input").on("blur", function(){
-        if($(this).val() === "") {
-            $(this).val("Email Address");
+    
+    // 4. Фокус на поле email
+    $('.email-input').on('focus', function(){
+        $(this).val('');
+    }).on('blur', function(){
+        if($(this).val() === '') {
+            $(this).val('Email Address');
         }
     });
 });
