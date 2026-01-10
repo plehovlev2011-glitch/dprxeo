@@ -238,15 +238,3 @@ p,li,input{
         font-size:12px;
     }
 }
-.buttons-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-}
-
-.btn-link img {
-    width: 140px;
-    height: 40px;
-    display: block;
-}
