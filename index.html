@@ -27,37 +27,18 @@
             <div class="page">
                 <center>
                     <div class="buttons-container" id="png-buttons">
-                        <!-- Пробуем base64 кодировку или прямая загрузка -->
-                        <div style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
-                            <!-- Вариант 1: Прямые div с background-image -->
-                            <a href="https://t.me/dementiapraecox1" target="_blank" 
-                               class="png-button" 
-                               style="background-image: url('/buttons/tg.png');">
-                            </a>
-                            
-                            <a href="https://www.instagram.com/meh88949?utm_source=qr" target="_blank" 
-                               class="png-button"
-                               style="background-image: url('/buttons/inst.png');">
-                            </a>
-                            
-                            <a href="https://dprxeo.vercel.app/me.html" target="_blank" 
-                               class="png-button"
-                               style="background-image: url('/buttons/justweb.png');">
-                            </a>
-                            
-                            <!-- Вариант 2: Резервный - обычные картинки -->
-                            <div style="display: none;" id="fallback">
-                                <a href="https://t.me/dementiapraecox1" target="_blank">
-                                    <img src="/buttons/tg.png" alt="tg" onerror="this.style.display='none'">
-                                </a>
-                                <a href="https://www.instagram.com/meh88949?utm_source=qr" target="_blank">
-                                    <img src="/buttons/inst.png" alt="inst" onerror="this.style.display='none'">
-                                </a>
-                                <a href="https://dprxeo.vercel.app/me.html" target="_blank">
-                                    <img src="/buttons/justweb.png" alt="more" onerror="this.style.display='none'">
-                                </a>
-                            </div>
-                        </div>
+                        <!-- Большие кнопки одинаковой ширины без отступов -->
+                        <a href="https://t.me/dementiapraecox1" target="_blank" 
+                           style="display: block; width: 280px; height: 80px; margin: 0 0 5px 0; background-image: url('/buttons/tg.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+                        </a>
+                        
+                        <a href="https://www.instagram.com/meh88949?utm_source=qr" target="_blank" 
+                           style="display: block; width: 280px; height: 80px; margin: 0 0 5px 0; background-image: url('/buttons/inst.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+                        </a>
+                        
+                        <a href="https://dprxeo.vercel.app/me.html" target="_blank" 
+                           style="display: block; width: 280px; height: 80px; margin: 0; background-image: url('/buttons/justweb.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+                        </a>
                     </div>
                 </center>
             </div>
@@ -71,58 +52,35 @@
 
     <script>
     $(document).ready(function(){
-        // Стили для кнопок с background-image
-        $('.png-button').each(function(){
-            $(this).css({
-                'display': 'block',
-                'width': '180px',
-                'height': '45px',
-                'background-size': 'contain',
-                'background-repeat': 'no-repeat',
-                'background-position': 'center',
-                'margin': '10px 0',
-                'border': 'none',
-                'cursor': 'pointer'
-            });
-        });
-        
-        // Звук клика
-        $('.png-button').on('click', function(e){
+        // Звук клика для всех больших кнопок
+        $('#png-buttons a').on('click', function(e){
             e.preventDefault();
             var href = $(this).attr('href');
             
+            // Звук
             $('#clickSound')[0].currentTime = 0;
             $('#clickSound')[0].play();
             
+            // Переход через 300мс
             setTimeout(function(){
                 window.open(href, '_blank');
             }, 300);
         });
         
-        // Проверяем загрузились ли картинки через 2 секунды
+        // Убедимся что картинки загружаются
         setTimeout(function(){
-            if($('.png-button').filter(function(){
-                return $(this).css('background-image') === 'none' || 
-                       $(this).css('background-image').indexOf('url') === -1;
-            }).length > 0) {
-                // Показываем резервный вариант
-                $('#fallback').show();
-                $('.png-button').hide();
-                
-                // Назначаем звук на резервные кнопки
-                $('#fallback a').on('click', function(e){
-                    e.preventDefault();
+            $('#png-buttons a').each(function(){
+                var bg = $(this).css('background-image');
+                if(!bg || bg === 'none') {
+                    // Если не загрузилось, пробуем напрямую img
                     var href = $(this).attr('href');
-                    
-                    $('#clickSound')[0].currentTime = 0;
-                    $('#clickSound')[0].play();
-                    
-                    setTimeout(function(){
-                        window.open(href, '_blank');
-                    }, 300);
-                });
-            }
-        }, 2000);
+                    var src = bg.match(/url\(['"]?(.*?)['"]?\)/);
+                    if(src && src[1]) {
+                        $(this).html('<img src="' + src[1] + '" style="width:280px;height:80px;">');
+                    }
+                }
+            });
+        }, 1000);
     });
     </script>
     
