@@ -9,7 +9,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="b">
-    <div class="viewport">
+    <!-- Основная страница -->
+    <div class="viewport main-viewport">
         <img src="_assets/01.jpg" alt="Background 1">
         <img src="_assets/02.jpg" alt="Background 2" style="display:none;">
 
@@ -32,7 +33,7 @@
                         </button>
                         
                         <!-- Кнопка "ME" для перехода на страницу с шифром -->
-                        <button class="styled-btn me-btn" data-page="secret-page">
+                        <button class="styled-btn me-btn" id="goToSecret">
                             <span class="btn-text">ME</span>
                         </button>
                         
@@ -42,45 +43,27 @@
                     </div>
                 </center>
             </div>
-
-            <!-- Секретная страница с шифром и горизонтальной каруселью -->
-            <div class="page secret-page">
-                <div class="cipher-container">
-                    <div class="cipher-text" id="cipherText">
-                        kofjioprhvuign5uiv4hernijgnfwoipughtbuirn
-                    </div>
-                </div>
-                
-                <div class="horizontal-carousel">
-                    <div class="carousel-track">
-                        <!-- Замените на свои изображения 03, 04, 05 -->
-                        <div class="carousel-slide">
-                            <img src="_assets/03.jpg" alt="Image 03">
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="_assets/04.jpg" alt="Image 04">
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="_assets/05.jpg" alt="Image 05">
-                        </div>
-                    </div>
-                    
-                    <button class="carousel-nav prev-nav">‹</button>
-                    <button class="carousel-nav next-nav">›</button>
-                    
-                    <div class="carousel-dots">
-                        <span class="dot active" data-slide="0"></span>
-                        <span class="dot" data-slide="1"></span>
-                        <span class="dot" data-slide="2"></span>
-                    </div>
-                </div>
-                
-                <!-- Кнопка возврата -->
-                <button class="back-btn styled-btn">
-                    <span class="btn-text">BACK</span>
-                </button>
-            </div>
         </div>
+    </div>
+
+    <!-- Секретная страница (изначально скрыта) -->
+    <div class="secret-page" style="display: none;">
+        <!-- Простой текст шифра без рамки -->
+        <div class="cipher-text">
+            kofjioprhvuign5uiv4hernijgnfwoipughtbuirn
+        </div>
+        
+        <!-- Горизонтальные изображения -->
+        <div class="horizontal-images">
+            <img src="_assets/03.jpg" alt="Image 03">
+            <img src="_assets/04.jpg" alt="Image 04">
+            <img src="_assets/05.jpg" alt="Image 05">
+        </div>
+        
+        <!-- Кнопка возврата -->
+        <button class="styled-btn back-btn" id="goBack">
+            <span class="btn-text">BACK</span>
+        </button>
     </div>
 
     <!-- Аудио для клика -->
