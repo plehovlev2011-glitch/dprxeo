@@ -26,18 +26,24 @@
             <!-- Вторая страница с кнопками -->
             <div class="page">
                 <center>
-                    <div class="buttons-container">
-                        <!-- Прямые изображения со ссылками -->
-                        <a href="https://t.me/dementiapraecox1" target="_blank" style="display: block; margin: 10px 0;">
-                            <img src="/buttons/tg.png" alt="Telegram" style="width: 180px; height: 45px;">
+                    <div class="buttons-container" id="png-buttons">
+                        <!-- Кнопки с inline стилями чтобы было видно -->
+                        <a href="https://t.me/dementiapraecox1" target="_blank" 
+                           style="display: block; margin: 15px 0; border: 2px solid red;">
+                            <img src="/buttons/tg.png" alt="Telegram" 
+                                 style="width: 180px; height: 45px; display: block;">
                         </a>
                         
-                        <a href="https://www.instagram.com/meh88949?utm_source=qr" target="_blank" style="display: block; margin: 10px 0;">
-                            <img src="/buttons/inst.png" alt="Instagram" style="width: 180px; height: 45px;">
+                        <a href="https://www.instagram.com/meh88949?utm_source=qr" target="_blank" 
+                           style="display: block; margin: 15px 0; border: 2px solid red;">
+                            <img src="/buttons/inst.png" alt="Instagram" 
+                                 style="width: 180px; height: 45px; display: block;">
                         </a>
                         
-                        <a href="https://dprxeo.vercel.app/me.html" target="_blank" style="display: block; margin: 10px 0;">
-                            <img src="/buttons/justweb.png" alt="More" style="width: 180px; height: 45px;">
+                        <a href="https://dprxeo.vercel.app/me.html" target="_blank" 
+                           style="display: block; margin: 15px 0; border: 2px solid red;">
+                            <img src="/buttons/justweb.png" alt="More" 
+                                 style="width: 180px; height: 45px; display: block;">
                         </a>
                     </div>
                 </center>
@@ -52,10 +58,19 @@
 
     <script>
     $(document).ready(function(){
-        // Звук клика для кнопок
-        $('.buttons-container a').on('click', function(e){
+        // Звук клика для всех ссылок в buttons-container
+        $('#png-buttons a').on('click', function(e){
+            e.preventDefault(); // Останавливаем переход
+            var href = $(this).attr('href');
+            
+            // Звук
             $('#clickSound')[0].currentTime = 0;
             $('#clickSound')[0].play();
+            
+            // Переход через 300мс
+            setTimeout(function(){
+                window.open(href, '_blank');
+            }, 300);
         });
     });
     </script>
