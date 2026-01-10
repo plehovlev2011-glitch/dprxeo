@@ -27,20 +27,18 @@
             <div class="page">
                 <center>
                     <div class="buttons-container">
-                        <!-- Телеграм -->
-                        <button class="styled-btn image-btn" data-link="https://t.me/dementiapraecox1">
-                            <img src="/buttons/tg.png" alt="tg" style="width: 140px; height: 40px; object-fit: contain;">
-                        </button>
+                        <!-- Просто ссылки с картинками -->
+                        <a href="https://t.me/dementiapraecox1" class="btn-link" target="_blank">
+                            <img src="/buttons/tg.png" alt="tg">
+                        </a>
                         
-                        <!-- Инстаграм -->
-                        <button class="styled-btn image-btn" data-link="https://www.instagram.com/meh88949?utm_source=qr">
-                            <img src="/buttons/inst.png" alt="inst" style="width: 140px; height: 40px; object-fit: contain;">
-                        </button>
+                        <a href="https://www.instagram.com/meh88949?utm_source=qr" class="btn-link" target="_blank">
+                            <img src="/buttons/inst.png" alt="inst">
+                        </a>
                         
-                        <!-- More -->
-                        <button class="styled-btn image-btn" data-link="https://dprxeo.vercel.app/me.html">
-                            <img src="/buttons/justweb.png" alt="more" style="width: 140px; height: 40px; object-fit: contain;">
-                        </button>
+                        <a href="https://dprxeo.vercel.app/me.html" class="btn-link" target="_blank">
+                            <img src="/buttons/justweb.png" alt="more">
+                        </a>
                     </div>
                 </center>
             </div>
@@ -52,6 +50,22 @@
         <source src="sounds/click.mp3" type="audio/mpeg">
     </audio>
 
-    <script src="scripts.js"></script>
+    <script>
+    // Простой скрипт для звука при клике
+    $(document).ready(function(){
+        $('.btn-link').on('click', function(e){
+            e.preventDefault();
+            var href = $(this).attr('href');
+            
+            // Воспроизводим звук
+            $('#clickSound')[0].play();
+            
+            // Переход через 300ms
+            setTimeout(function(){
+                window.open(href, '_blank');
+            }, 300);
+        });
+    });
+    </script>
 </body>
 </html>
