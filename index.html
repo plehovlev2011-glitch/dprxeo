@@ -23,21 +23,23 @@
                 </center>
             </div>
 
-            <!-- Вторая страница с кнопками -->
+            <!-- Вторая страница с кнопками-изображениями -->
             <div class="page">
                 <center>
                     <div class="buttons-container">
-                        <!-- Просто ссылки с картинками -->
-                        <a href="https://t.me/dementiapraecox1" class="btn-link" target="_blank">
-                            <img src="/buttons/tg.png" alt="tg">
+                        <!-- Телеграм кнопка -->
+                        <a href="https://t.me/dementiapraecox1" class="image-btn" target="_blank">
+                            <img src="/buttons/tg.png" alt="Telegram" class="btn-image">
                         </a>
                         
-                        <a href="https://www.instagram.com/meh88949?utm_source=qr" class="btn-link" target="_blank">
-                            <img src="/buttons/inst.png" alt="inst">
+                        <!-- Инстаграм кнопка -->
+                        <a href="https://www.instagram.com/meh88949?utm_source=qr" class="image-btn" target="_blank">
+                            <img src="/buttons/inst.png" alt="Instagram" class="btn-image">
                         </a>
                         
-                        <a href="https://dprxeo.vercel.app/me.html" class="btn-link" target="_blank">
-                            <img src="/buttons/justweb.png" alt="more">
+                        <!-- More кнопка -->
+                        <a href="https://dprxeo.vercel.app/me.html" class="image-btn" target="_blank">
+                            <img src="/buttons/justweb.png" alt="More" class="btn-image">
                         </a>
                     </div>
                 </center>
@@ -50,22 +52,6 @@
         <source src="sounds/click.mp3" type="audio/mpeg">
     </audio>
 
-    <script>
-    // Простой скрипт для звука при клике
-    $(document).ready(function(){
-        $('.btn-link').on('click', function(e){
-            e.preventDefault();
-            var href = $(this).attr('href');
-            
-            // Воспроизводим звук
-            $('#clickSound')[0].play();
-            
-            // Переход через 300ms
-            setTimeout(function(){
-                window.open(href, '_blank');
-            }, 300);
-        });
-    });
-    </script>
+    <script src="scripts.js"></script>
 </body>
 </html>
