@@ -48,21 +48,85 @@
         </div>
     </div>
 
-    <!-- Аудио для клика -->
-    <audio id="clickSound" preload="auto">
-        <source src="sounds/click.mp3" type="audio/mpeg">
-    </audio>
+    <!-- Создаем аудио элементы для всех случайных звуков -->
+    <div id="audio-container" style="display:none;">
+        <audio id="btnFX1" preload="auto">
+            <source src="/buttonFXs/btnFX1.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="btnFX2" preload="auto">
+            <source src="/buttonFXs/btnFX2.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="btnFX3" preload="auto">
+            <source src="/buttonFXs/btnFX3.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="btnFX4" preload="auto">
+            <source src="/buttonFXs/btnFX4.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="btnFX5" preload="auto">
+            <source src="/buttonFXs/btnFX5.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="btnFX6" preload="auto">
+            <source src="/buttonFXs/btnFX6.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="btnFX7" preload="auto">
+            <source src="/buttonFXs/btnFX7.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="btnFX8" preload="auto">
+            <source src="/buttonFXs/btnFX8.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="btnFX9" preload="auto">
+            <source src="/buttonFXs/btnFX9.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="btnFX10" preload="auto">
+            <source src="/buttonFXs/btnFX10.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="btnFX11" preload="auto">
+            <source src="/buttonFXs/btnFX11.mp3" type="audio/mpeg">
+        </audio>
+    </div>
 
     <script>
     $(document).ready(function(){
+        // Функция для воспроизведения случайного звука
+        function playRandomButtonSound() {
+            // Список всех доступных звуков кнопок
+            var sounds = [
+                'btnFX1', 'btnFX2', 'btnFX3', 'btnFX4', 'btnFX5',
+                'btnFX6', 'btnFX7', 'btnFX8', 'btnFX9', 'btnFX10', 'btnFX11'
+            ];
+            
+            // Выбираем случайный звук
+            var randomSoundId = sounds[Math.floor(Math.random() * sounds.length)];
+            
+            // Находим аудио элемент
+            var audioElement = document.getElementById(randomSoundId);
+            
+            if (audioElement) {
+                // Сбрасываем на начало и воспроизводим
+                audioElement.currentTime = 0;
+                audioElement.play().catch(function(error) {
+                    console.log('Ошибка воспроизведения звука:', error);
+                    // Если один звук не работает, пробуем другой
+                    var otherSounds = sounds.filter(s => s !== randomSoundId);
+                    if (otherSounds.length > 0) {
+                        var fallbackSoundId = otherSounds[Math.floor(Math.random() * otherSounds.length)];
+                        var fallbackAudio = document.getElementById(fallbackSoundId);
+                        if (fallbackAudio) {
+                            fallbackAudio.currentTime = 0;
+                            fallbackAudio.play().catch(e => console.log('Fallback тоже не работает:', e));
+                        }
+                    }
+                });
+            }
+        }
+        
         // Звук клика для всех больших кнопок
         $('#png-buttons a').on('click', function(e){
             e.preventDefault();
             var href = $(this).attr('href');
             
-            // Звук
-            $('#clickSound')[0].currentTime = 0;
-            $('#clickSound')[0].play();
+            // Воспроизводим случайный звук вместо стандартного
+            playRandomButtonSound();
             
             // Переход через 300мс
             setTimeout(function(){
@@ -74,9 +138,8 @@
         $('center a[href="play.html"]').on('click', function(e){
             e.preventDefault();
             
-            // Звук
-            $('#clickSound')[0].currentTime = 0;
-            $('#clickSound')[0].play();
+            // Воспроизводим случайный звук вместо стандартного
+            playRandomButtonSound();
             
             // Переход через 300мс
             setTimeout(function(){
@@ -95,6 +158,18 @@
                     if(src && src[1]) {
                         $(this).html('<img src="' + src[1] + '" style="width:280px;height:80px;">');
                     }
+                }
+            });
+        }, 1000);
+        
+        // Предзагрузка звуков для уменьшения задержки
+        setTimeout(function() {
+            var soundIds = ['btnFX1', 'btnFX2', 'btnFX3', 'btnFX4', 'btnFX5', 
+                           'btnFX6', 'btnFX7', 'btnFX8', 'btnFX9', 'btnFX10', 'btnFX11'];
+            soundIds.forEach(function(id) {
+                var audio = document.getElementById(id);
+                if (audio) {
+                    audio.load();
                 }
             });
         }, 1000);
