@@ -20,77 +20,141 @@ html,body{
     color:white;
     height:300vh;
     -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
 }
 
-.credit{
-    position:absolute;
-    bottom:7px;
-    right:7px;
-    font-size:8px;
-    opacity:0.5;
-    font-weight:500;
-    text-transform:uppercase;
-}
-
-@media screen and (max-width:700px){
-    .credit{
-        bottom:35px;
-        right: 14px;
-    }
-}
-
-a{
-    color:white;
-    text-decoration: none;
-}
-
-input,.button{
-    background:none;
-    font-family: 'Arial Narrow', Arial, sans-serif;
-    font-size:14px;
-    text-transform: uppercase;
-    font-weight:bold;
-    border:0;
-    color:white;
-    outline:0;
-}
-
-.button{
-    cursor:pointer;
-}
-
-.viewport{
-    position: fixed;
-    width:100%;
-    height:100vh;
-    z-index:3;
-}
-
-.viewport img{
-    z-index: 3;
-    background:black;
-    height:100vh;
-}
-
-img{
+/* Контейнер для шифра */
+.cipher-container {
     position: absolute;
-    width:100%;
-    height:100%;
-    max-height:100vh;
-    max-width:100vw;
+    top: 30px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 10;
+    padding: 0 20px;
 }
 
-.page{
-    display: none;
-    width:100%;
-    height:100vh;
+.cipher-text {
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px 30px;
+    border-radius: 5px;
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    word-break: break-all;
+    max-width: 90%;
 }
 
-.page.a{
-    display: block;
+/* Горизонтальная карусель */
+.horizontal-carousel {
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1200px;
+    height: 70vh;
+    overflow: hidden;
+    z-index: 5;
 }
 
-/* Стили для кнопок на второй странице - УПРОЩЕННЫЕ */
+.carousel-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.5s ease;
+}
+
+.carousel-slide {
+    flex: 0 0 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+/* Навигация карусели */
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 40px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-nav:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prev-nav {
+    left: 20px;
+}
+
+.next-nav {
+    right: 20px;
+}
+
+/* Точки навигации */
+.carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 10;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.dot.active {
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.2);
+}
+
+.dot:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Кнопка возврата */
+.back-btn {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+/* Стили для кнопок на второй странице */
 .buttons-container {
     display: flex;
     flex-direction: column;
@@ -157,8 +221,66 @@ img{
     letter-spacing: 3px;
 }
 
-/* Адаптивность */
+/* Адаптивность для карусели */
 @media screen and (max-width: 768px) {
+    .cipher-container {
+        top: 20px;
+    }
+    
+    .cipher-text {
+        font-size: 14px;
+        letter-spacing: 2px;
+        padding: 12px 20px;
+    }
+    
+    .horizontal-carousel {
+        top: 100px;
+        height: 60vh;
+        width: 95%;
+    }
+    
+    .carousel-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 30px;
+    }
+    
+    .carousel-dots {
+        bottom: 15px;
+    }
+    
+    .dot {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .cipher-text {
+        font-size: 12px;
+        letter-spacing: 1px;
+        padding: 10px 15px;
+    }
+    
+    .horizontal-carousel {
+        top: 90px;
+        height: 50vh;
+    }
+    
+    .carousel-nav {
+        width: 35px;
+        height: 35px;
+        font-size: 25px;
+    }
+    
+    .prev-nav {
+        left: 10px;
+    }
+    
+    .next-nav {
+        right: 10px;
+    }
+    
     .buttons-container {
         gap: 15px;
     }
@@ -175,29 +297,16 @@ img{
     }
 }
 
-@media screen and (max-width: 480px) {
-    .buttons-container {
-        gap: 12px;
-    }
-    
-    .styled-btn {
-        width: 140px;
-        height: 35px;
-    }
-    
-    .btn-text {
-        font-size: 20px;
-        line-height: 35px;
-        height: 35px;
-        letter-spacing: 1px;
-    }
-    
-    .styled-btn:hover .btn-text {
-        letter-spacing: 2px;
-    }
-}
-
 @media screen and (max-width: 320px) {
+    .cipher-text {
+        font-size: 11px;
+        padding: 8px 12px;
+    }
+    
+    .horizontal-carousel {
+        height: 45vh;
+    }
+    
     .styled-btn {
         width: 130px;
         height: 32px;
@@ -208,6 +317,55 @@ img{
         line-height: 32px;
         height: 32px;
     }
+}
+
+/* Остальные стили остаются без изменений */
+.credit{
+    position:absolute;
+    bottom:7px;
+    right:7px;
+    font-size:8px;
+    opacity:0.5;
+    font-weight:500;
+    text-transform:uppercase;
+}
+
+@media screen and (max-width:700px){
+    .credit{
+        bottom:35px;
+        right: 14px;
+    }
+}
+
+.viewport{
+    position: fixed;
+    width:100%;
+    height:100vh;
+    z-index:3;
+}
+
+.viewport img{
+    z-index: 3;
+    background:black;
+    height:100vh;
+}
+
+img{
+    position: absolute;
+    width:100%;
+    height:100%;
+    max-height:100vh;
+    max-width:100vw;
+}
+
+.page{
+    display: none;
+    width:100%;
+    height:100vh;
+}
+
+.page.a{
+    display: block;
 }
 
 center{
