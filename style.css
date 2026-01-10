@@ -238,3 +238,23 @@ p,li,input{
         font-size:12px;
     }
 }
+/* Стили для PNG кнопок - добавляются в конец файла */
+.png-btn {
+    display: block;
+    width: 180px;
+    height: 45px;
+    margin: 10px 0;
+}
+
+.png-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+/* Убираем стандартные стили ссылок */
+.png-btn, .png-btn:hover, .png-btn:active {
+    text-decoration: none;
+    background: none;
+    border: none;
+    outline: none;
+}
